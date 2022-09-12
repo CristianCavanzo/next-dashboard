@@ -1,14 +1,14 @@
 import { MainLayout } from '@layout/Main.layout';
-import { Fragment } from 'react';
-import '../styles/tailwind.css';
+import { ProviderAuth } from '@hooks/useAuth';
 
+import '../styles/tailwind.css';
 function MyApp({ Component, pageProps }) {
 	return (
-		<Fragment>
+		<ProviderAuth>
 			<MainLayout>
-				<Component {...pageProps} />;
+				<Component {...pageProps} />
 			</MainLayout>
-		</Fragment>
+		</ProviderAuth>
 	);
 }
 
