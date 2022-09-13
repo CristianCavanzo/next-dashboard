@@ -1,6 +1,5 @@
 import { Popover, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useAuth } from 'hooks/useAuth';
 import Link from 'next/link';
 import React, { Fragment } from 'react';
 
@@ -11,8 +10,6 @@ const Home = () => {
 		{ name: 'Marketplace', href: '#' },
 		{ name: 'Company', href: '#' },
 	];
-	let data = useAuth();
-	console.log(data);
 	return (
 		<div className="relative overflow-hidden bg-white">
 			<div className="mx-auto max-w-7xl">

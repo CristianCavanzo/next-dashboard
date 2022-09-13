@@ -9,15 +9,32 @@ const useProvideAuth = () => {
 	const [user, setUser] = useState(null);
 
 	const sigIn = async (email, password) => {
-		const { data: acess_token } = await axios({
-			method: 'POST',
-			url: endPoints.auth.login,
-			data: {
-				email,
-				password,
-			},
-		});
-		console.log(acess_token);
+		try {
+			const { data: access_token } = await axios({
+				method: 'POST',
+				url: endPoints.auth.login,
+				data: {
+					email,
+					password,
+				},
+			});
+			console.log(access_token);
+			if (access_token) {
+				const token = access_token.access_token;
+				Cookie.set('token', token, { expires: 5 });
+
+				let { data: user } = await axios({
+					method: 'GET',
+					url: endPoints.auth.profile,
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				setUser(user);
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	};
 	return { user, sigIn };
 };

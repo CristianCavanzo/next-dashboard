@@ -6,15 +6,12 @@ export default function LoginPage() {
 	const emailRef = useRef(null);
 	const passwordRef = useRef(null);
 	const auth = ConsumerAuth();
-	console.log(auth);
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const email = emailRef.current.value;
 		const password = passwordRef.current.value;
-		auth.sigIn(email, password).then((res) => {
-			console.log(res);
-		});
+		await auth.sigIn(email, password);
 	};
 
 	return (
