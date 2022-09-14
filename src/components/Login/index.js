@@ -1,17 +1,25 @@
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { ConsumerAuth } from '@hooks/useAuth';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
 
 export default function LoginPage() {
 	const emailRef = useRef(null);
 	const passwordRef = useRef(null);
 	const auth = ConsumerAuth();
-
+	const router = useRouter();
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const email = emailRef.current.value;
 		const password = passwordRef.current.value;
-		await auth.sigIn(email, password);
+		await auth
+			.sigIn(email, password)
+			.then(() => {
+				router.push('/dashboard');
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	};
 
 	return (
