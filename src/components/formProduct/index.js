@@ -1,7 +1,7 @@
 import { addProduct } from '@services/api/product';
 import { useRef } from 'react';
 
-export default function FormProduct() {
+export default function FormProduct({ setOpen, setAlert }) {
 	const formRef = useRef(null);
 
 	const handleSubmit = (event) => {
@@ -15,12 +15,23 @@ export default function FormProduct() {
 			images: [formData.get('images').name],
 		};
 		addProduct(data)
-			.then((response) => {
-				console.log(response);
+			.then(() => {
+				setAlert({
+					active: true,
+					message: 'Producto agregado correctamente',
+					type: 'success',
+					autoClose: false,
+				});
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch((error) => {
+				setAlert({
+					active: true,
+					message: error.message,
+					type: 'error',
+					autoClose: false,
+				});
 			});
+		setOpen(false);
 	};
 
 	return (

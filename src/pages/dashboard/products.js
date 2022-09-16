@@ -1,14 +1,39 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import { CheckIcon } from '@heroicons/react/20/solid';
 import Modal from '@common/modal';
 import FormProduct from '@components/formProduct';
+import axios from 'axios';
+import { endPoints } from '@services/api';
+import { useAlert } from '@hooks/useAlert';
+import { Alert } from '@common/Alert';
 
 const Products = () => {
 	let [products, setProducts] = useState([]);
 	const [open, setOpen] = useState(false);
+	const { alert, setAlert, toggleAlert } = useAlert();
+	useEffect(() => {
+		const loadProduct = async () => {
+			const { data: response } = await axios({
+				method: 'GET',
+				url: endPoints.products.allProducts,
+			});
+			setProducts(response);
+		};
+		try {
+			loadProduct();
+		} catch (error) {
+			setAlert({
+				active: true,
+				message: error.message,
+				type: 'error',
+				autoClose: false,
+			});
+		}
+	}, [alert, setAlert]);
 	return (
 		<Fragment>
+			<Alert alert={alert} handleClose={toggleAlert} />
 			<div className="lg:flex lg:items-center lg:justify-between mb-8">
 				<div className="min-w-0 flex-1">
 					<h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
@@ -112,7 +137,7 @@ const Products = () => {
 				</div>
 			</div>
 			<Modal open={open} setOpen={setOpen}>
-				<FormProduct />
+				<FormProduct setOpen={setOpen} setAlert={setAlert} />
 			</Modal>
 		</Fragment>
 	);
