@@ -42,7 +42,13 @@ const useProvideAuth = () => {
 			}
 		});
 	};
-	return { user, sigIn };
+	const logout = () => {
+		Cookie.remove('token');
+		setUser(null);
+		delete axios.defaults.headers.authorization;
+		window.location.href = '/login';
+	};
+	return { user, sigIn, logout };
 };
 
 export const ProviderAuth = ({ children }) => {

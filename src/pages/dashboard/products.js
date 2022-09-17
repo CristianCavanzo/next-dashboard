@@ -8,6 +8,7 @@ import { useAlert } from '@hooks/useAlert';
 import { Alert } from '@common/Alert';
 import { deleteProduct } from '@services/api/product';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Products = () => {
 	let [products, setProducts] = useState([]);
@@ -108,10 +109,13 @@ const Products = () => {
 											<td className="px-6 py-4 whitespace-nowrap">
 												<div className="flex items-center">
 													<div className="flex-shrink-0 h-10 w-10">
-														<img
+														<Image
 															className="h-10 w-10 rounded-full"
 															src={product.images[0]}
 															alt=""
+															width={400}
+															height={400}
+															objectFit="cover"
 														/>
 													</div>
 													<div className="ml-4">
