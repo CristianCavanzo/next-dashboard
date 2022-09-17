@@ -1,12 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
-
-import { CheckIcon } from '@heroicons/react/20/solid';
+import { CheckIcon, XCircleIcon } from '@heroicons/react/20/solid';
 import Modal from '@common/modal';
 import FormProduct from '@components/formProduct';
 import axios from 'axios';
 import { endPoints } from '@services/api';
 import { useAlert } from '@hooks/useAlert';
 import { Alert } from '@common/Alert';
+import { deleteProduct } from '@services/api/product';
+import Link from 'next/link';
 
 const Products = () => {
 	let [products, setProducts] = useState([]);
@@ -31,6 +32,16 @@ const Products = () => {
 			});
 		}
 	}, [alert, setAlert]);
+	const handleDelete = (id) => {
+		deleteProduct(id).then(() => {
+			setAlert({
+				active: true,
+				message: 'Producto eliminado correctamente',
+				type: 'error',
+				autoClose: true,
+			});
+		});
+	};
 	return (
 		<Fragment>
 			<Alert alert={alert} handleClose={toggleAlert} />
@@ -119,14 +130,18 @@ const Products = () => {
 											</td>
 
 											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-												<a href="/edit" className="text-indigo-600 hover:text-indigo-900">
-													Edit
-												</a>
+												<Link href={`/dashboard/edit/${product.id}`}>
+													<p className="text-indigo-600 hover:text-indigo-900 cursor-pointer">
+														Edit
+													</p>
+												</Link>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-												<a href="/edit" className="text-indigo-600 hover:text-indigo-900">
-													Delete
-												</a>
+												<XCircleIcon
+													className="flex-shrink-0 h-6 w-6 text-gray-400 cursor-pointer"
+													aria-hidden="true"
+													onClick={() => handleDelete(product.id)}
+												/>
 											</td>
 										</tr>
 									))}

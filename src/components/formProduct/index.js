@@ -1,8 +1,10 @@
-import { addProduct } from '@services/api/product';
+import { addProduct, updateProduct } from '@services/api/product';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
 
-export default function FormProduct({ setOpen, setAlert }) {
+export default function FormProduct({ setOpen, setAlert, product }) {
 	const formRef = useRef(null);
+	const router = useRouter();
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -14,24 +16,36 @@ export default function FormProduct({ setOpen, setAlert }) {
 			categoryId: Number(formData.get('category')),
 			images: [formData.get('images').name],
 		};
-		addProduct(data)
-			.then(() => {
+		if (!product) {
+			addProduct(data)
+				.then(() => {
+					setAlert({
+						active: true,
+						message: 'Producto agregado correctamente',
+						type: 'success',
+						autoClose: false,
+					});
+				})
+				.catch((error) => {
+					setAlert({
+						active: true,
+						message: error.message,
+						type: 'error',
+						autoClose: false,
+					});
+				});
+			setOpen(false);
+		} else {
+			updateProduct(product.id, data).then(() => {
 				setAlert({
 					active: true,
-					message: 'Producto agregado correctamente',
+					message: 'Producto actualizado correctamente',
 					type: 'success',
 					autoClose: false,
 				});
-			})
-			.catch((error) => {
-				setAlert({
-					active: true,
-					message: error.message,
-					type: 'error',
-					autoClose: false,
-				});
+				router.push('/dashboard/products');
 			});
-		setOpen(false);
+		}
 	};
 
 	return (
@@ -44,6 +58,7 @@ export default function FormProduct({ setOpen, setAlert }) {
 								Title
 							</label>
 							<input
+								defaultValue={product?.title}
 								type="text"
 								name="title"
 								id="title"
@@ -55,6 +70,7 @@ export default function FormProduct({ setOpen, setAlert }) {
 								Price
 							</label>
 							<input
+								defaultValue={product?.price}
 								type="number"
 								name="price"
 								id="price"
@@ -70,6 +86,7 @@ export default function FormProduct({ setOpen, setAlert }) {
 								name="category"
 								autoComplete="category-name"
 								className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+								value={product?.category?.id}
 							>
 								<option value="1">Clothes</option>
 								<option value="2">Electronics</option>
@@ -84,6 +101,7 @@ export default function FormProduct({ setOpen, setAlert }) {
 								Description
 							</label>
 							<textarea
+								defaultValue={product?.description}
 								name="description"
 								id="description"
 								autoComplete="description"
@@ -118,7 +136,13 @@ export default function FormProduct({ setOpen, setAlert }) {
 												className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
 											>
 												<span>Upload a file</span>
-												<input id="images" name="images" type="file" className="sr-only" />
+												<input
+													defaultValue={product?.images}
+													id="images"
+													name="images"
+													type="file"
+													className="sr-only"
+												/>
 											</label>
 											<p className="pl-1">or drag and drop</p>
 										</div>

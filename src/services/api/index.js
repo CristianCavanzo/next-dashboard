@@ -7,13 +7,13 @@ const endPoints = {
 		profile: `${API}/api/${VERSION}/auth/profile`,
 	},
 	products: {
-		getProduct: (id) => `${API}/api/${VERSION}/auth/${id}`,
+		getProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
 		allProducts: `${API}/api/${VERSION}/products/`,
 		getProducts: (limit, offset) =>
 			`${API}/api/${VERSION}/products/?limit=${limit}&offset=${offset}`,
 		addProducts: `${API}/api/${VERSION}/products`,
-		putProducts: (id) => `${API}/api/${VERSION}/products/${id}`,
-		deleteProducts: (id) => `${API}/api/${VERSION}/products/${id}`,
+		updateProducts: (id) => `${API}/api/${VERSION}/products/${id}`,
+		deleteProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
 	},
 	users: {
 		getUsers: `${API}/api/${VERSION}/users`,
